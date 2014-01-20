@@ -17,6 +17,8 @@ Software is based on the ArtNet protocol and whatever LED communication protocol
 
 Dependencies
 ------------
+[Arduino_ArtNet](https://github.com/media-architecture/Arduino_ArtNet)
+
 
 Version history
 ---------------
