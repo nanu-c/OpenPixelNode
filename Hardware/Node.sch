@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.2">
+<eagle version="6.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -15782,10 +15782,6 @@ Source: www.kingbright.com</description>
 <part name="P+10" library="supply1" deviceset="VCC" device=""/>
 <part name="P+11" library="supply1" deviceset="VCC" device=""/>
 <part name="P+12" library="supply1" deviceset="VCC" device=""/>
-<part name="C8" library="rcl" deviceset="CPOL-EU" device="E5-10.5"/>
-<part name="C9" library="rcl" deviceset="CPOL-EU" device="E5-10.5"/>
-<part name="C10" library="rcl" deviceset="CPOL-EU" device="E5-10.5"/>
-<part name="C11" library="rcl" deviceset="CPOL-EU" device="E5-10.5"/>
 <part name="LED1" library="led" deviceset="LED" device="3MM"/>
 <part name="R2" library="rcl" deviceset="R-EU_" device="0207/10"/>
 <part name="GND17" library="supply1" deviceset="GND" device=""/>
@@ -15865,10 +15861,6 @@ Source: www.kingbright.com</description>
 <instance part="P+10" gate="VCC" x="30.48" y="175.26"/>
 <instance part="P+11" gate="VCC" x="60.96" y="175.26"/>
 <instance part="P+12" gate="VCC" x="91.44" y="175.26"/>
-<instance part="C8" gate="G$1" x="10.16" y="165.1"/>
-<instance part="C9" gate="G$1" x="40.64" y="165.1"/>
-<instance part="C10" gate="G$1" x="71.12" y="165.1"/>
-<instance part="C11" gate="G$1" x="101.6" y="165.1"/>
 <instance part="LED1" gate="G$1" x="175.26" y="53.34"/>
 <instance part="R2" gate="G$1" x="170.18" y="53.34" rot="R270"/>
 <instance part="GND17" gate="1" x="175.26" y="43.18"/>
@@ -15969,32 +15961,24 @@ Source: www.kingbright.com</description>
 <wire x1="12.7" y1="160.02" x2="10.16" y2="160.02" width="0.1524" layer="91"/>
 <wire x1="10.16" y1="160.02" x2="10.16" y2="157.48" width="0.1524" layer="91"/>
 <pinref part="GND12" gate="1" pin="GND"/>
-<pinref part="C8" gate="G$1" pin="-"/>
-<junction x="10.16" y="160.02"/>
 </segment>
 <segment>
 <pinref part="U$2" gate="G$1" pin="P$1"/>
 <wire x1="43.18" y1="160.02" x2="40.64" y2="160.02" width="0.1524" layer="91"/>
 <wire x1="40.64" y1="160.02" x2="40.64" y2="157.48" width="0.1524" layer="91"/>
 <pinref part="GND13" gate="1" pin="GND"/>
-<pinref part="C9" gate="G$1" pin="-"/>
-<junction x="40.64" y="160.02"/>
 </segment>
 <segment>
 <pinref part="U$3" gate="G$1" pin="P$1"/>
 <wire x1="73.66" y1="160.02" x2="71.12" y2="160.02" width="0.1524" layer="91"/>
 <wire x1="71.12" y1="160.02" x2="71.12" y2="157.48" width="0.1524" layer="91"/>
 <pinref part="GND14" gate="1" pin="GND"/>
-<pinref part="C10" gate="G$1" pin="-"/>
-<junction x="71.12" y="160.02"/>
 </segment>
 <segment>
 <pinref part="U$4" gate="G$1" pin="P$1"/>
 <wire x1="104.14" y1="160.02" x2="101.6" y2="160.02" width="0.1524" layer="91"/>
 <wire x1="101.6" y1="160.02" x2="101.6" y2="157.48" width="0.1524" layer="91"/>
 <pinref part="GND15" gate="1" pin="GND"/>
-<pinref part="C11" gate="G$1" pin="-"/>
-<junction x="101.6" y="160.02"/>
 </segment>
 <segment>
 <pinref part="U$5" gate="A" pin="P$1"/>
@@ -16113,39 +16097,27 @@ Source: www.kingbright.com</description>
 </segment>
 <segment>
 <pinref part="U$1" gate="G$2" pin="P$1"/>
-<wire x1="12.7" y1="167.64" x2="10.16" y2="167.64" width="0.1524" layer="91"/>
-<wire x1="10.16" y1="167.64" x2="0" y2="167.64" width="0.1524" layer="91"/>
+<wire x1="12.7" y1="167.64" x2="0" y2="167.64" width="0.1524" layer="91"/>
 <wire x1="0" y1="167.64" x2="0" y2="172.72" width="0.1524" layer="91"/>
 <pinref part="P+9" gate="VCC" pin="VCC"/>
-<pinref part="C8" gate="G$1" pin="+"/>
-<junction x="10.16" y="167.64"/>
 </segment>
 <segment>
 <pinref part="U$2" gate="G$2" pin="P$1"/>
-<wire x1="43.18" y1="167.64" x2="40.64" y2="167.64" width="0.1524" layer="91"/>
-<wire x1="40.64" y1="167.64" x2="30.48" y2="167.64" width="0.1524" layer="91"/>
+<wire x1="43.18" y1="167.64" x2="30.48" y2="167.64" width="0.1524" layer="91"/>
 <wire x1="30.48" y1="167.64" x2="30.48" y2="172.72" width="0.1524" layer="91"/>
 <pinref part="P+10" gate="VCC" pin="VCC"/>
-<pinref part="C9" gate="G$1" pin="+"/>
-<junction x="40.64" y="167.64"/>
 </segment>
 <segment>
 <pinref part="U$3" gate="G$2" pin="P$1"/>
-<wire x1="73.66" y1="167.64" x2="71.12" y2="167.64" width="0.1524" layer="91"/>
-<wire x1="71.12" y1="167.64" x2="60.96" y2="167.64" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="167.64" x2="60.96" y2="167.64" width="0.1524" layer="91"/>
 <wire x1="60.96" y1="167.64" x2="60.96" y2="172.72" width="0.1524" layer="91"/>
 <pinref part="P+11" gate="VCC" pin="VCC"/>
-<pinref part="C10" gate="G$1" pin="+"/>
-<junction x="71.12" y="167.64"/>
 </segment>
 <segment>
 <pinref part="U$4" gate="G$2" pin="P$1"/>
-<wire x1="104.14" y1="167.64" x2="101.6" y2="167.64" width="0.1524" layer="91"/>
-<wire x1="101.6" y1="167.64" x2="91.44" y2="167.64" width="0.1524" layer="91"/>
+<wire x1="104.14" y1="167.64" x2="91.44" y2="167.64" width="0.1524" layer="91"/>
 <wire x1="91.44" y1="167.64" x2="91.44" y2="172.72" width="0.1524" layer="91"/>
 <pinref part="P+12" gate="VCC" pin="VCC"/>
-<pinref part="C11" gate="G$1" pin="+"/>
-<junction x="101.6" y="167.64"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -16223,11 +16195,6 @@ Source: www.kingbright.com</description>
 </segment>
 </net>
 <net name="RESET" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="/RESET"/>
-<wire x1="218.44" y1="33.02" x2="226.06" y2="33.02" width="0.1524" layer="91"/>
-<label x="226.06" y="33.02" size="1.778" layer="95"/>
-</segment>
 <segment>
 <pinref part="ICSP" gate="A" pin="5"/>
 <wire x1="109.22" y1="104.14" x2="88.9" y2="104.14" width="0.1524" layer="91"/>
@@ -16346,8 +16313,13 @@ Source: www.kingbright.com</description>
 <net name="N$21" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="PB0(ICP)"/>
-<wire x1="139.7" y1="43.18" x2="157.48" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="139.7" y1="43.18" x2="165.1" y2="43.18" width="0.1524" layer="91"/>
 <label x="157.48" y="43.18" size="1.778" layer="95"/>
+<pinref part="IC1" gate="G$1" pin="/RESET"/>
+<wire x1="218.44" y1="33.02" x2="231.14" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="231.14" y1="33.02" x2="231.14" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="231.14" y1="66.04" x2="165.1" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="165.1" y1="66.04" x2="165.1" y2="43.18" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$22" class="0">

@@ -1,5 +1,10 @@
 .DS_Store
 
+# Backup files
+*.s#?
+*.b#?
+*.l#?
+
 # Compiled Object files
 *.slo
 *.lo
