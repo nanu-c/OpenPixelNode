@@ -3,7 +3,9 @@ OpenPixelNode
 
 This project includes both hardware and software for an open-source LED controller for up to 4 ArtNet universes.
 
-![OpenPixelNode](http://farm3.staticflickr.com/2849/12051620225_271beee82c_c.jpg)
+![OpenPixelNode](http://farm6.staticflickr.com/5523/12052788786_0aee2eae79_c.jpg)
+
+More images here: http://flic.kr/s/aHsjQY2NrD
 
 Hardware
 --------
@@ -21,6 +23,9 @@ Dependencies
 ------------
 [Arduino_ArtNet](https://github.com/media-architecture/Arduino_ArtNet)
 
+[Arduino_ws2812](https://github.com/media-architecture/Arduino_ws2812)
+
+[WIZ_Ethernet_Library](https://github.com/media-architecture/WIZ_Ethernet_Library)
 
 Version history
 ---------------
