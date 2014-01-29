@@ -27,6 +27,9 @@ Dependencies
 
 [WIZ_Ethernet_Library](https://github.com/media-architecture/WIZ_Ethernet_Library)
 
+[TrueRandom](https://code.google.com/p/tinkerit/wiki/TrueRandom)
+
+
 Version history
 ---------------
 
