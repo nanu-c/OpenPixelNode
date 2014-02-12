@@ -1,7 +1,11 @@
 OpenPixelNode
 =============
 
-LED controller with Ethernet interface. This project includes both hardware and software for an open-source LED controller for up to 4 ArtNet universes.
+This project includes both hardware and software for an open-source LED controller for up to 4 ArtNet universes.
+
+![OpenPixelNode](http://farm6.staticflickr.com/5523/12052788786_0aee2eae79_c.jpg)
+
+More images here: http://flic.kr/s/aHsjQY2NrD
 
 Hardware
 --------
@@ -12,15 +16,22 @@ At the moment there is only ICSP headers for programming.
 
 Software
 --------
-Software is based on the ArtNet protocol and whatever LED communication protocol you may want to use. At the moment there is only support for WS2812.
+The software is an Arduino sketch using a library for the ArtNet protocol and whatever LED communication protocol you may want to use. At the moment there is only support for WS2812.
 
 
 Dependencies
 ------------
 [Arduino_ArtNet](https://github.com/media-architecture/Arduino_ArtNet)
 
+[Arduino_ws2812](https://github.com/media-architecture/Arduino_ws2812)
+
+[WIZ_Ethernet_Library](https://github.com/media-architecture/WIZ_Ethernet_Library)
+
+[TrueRandom](https://code.google.com/p/tinkerit/wiki/TrueRandom)
+
 
 Version history
 ---------------
 
+### Prototype 2 (January 2014)
 ### Prototype 1 (September 2013)
