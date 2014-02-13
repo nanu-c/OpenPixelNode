@@ -37,8 +37,8 @@ ArtNetConfig config = {
   0, 21                                 // Version
 };
 
-// Art-Net class instance with 1024 bytes buffer
-ArtNet artnet = ArtNet(config, 1024);
+// Art-Net class instance with 1110 bytes buffer, will support 360 pixels per port
+ArtNet artnet = ArtNet(config, 1110);
 
 // LED control
 static WS2811Controller800Khz<0, GRB> port1;
@@ -142,3 +142,4 @@ void ethernetMaximize() {
   W5100.setRXMemorySizes(sizes);
 #endif
 }
+
