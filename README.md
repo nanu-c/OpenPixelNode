@@ -16,14 +16,14 @@ At the moment there is only ICSP headers for programming.
 
 Software
 --------
-The software is an Arduino sketch using a library for the ArtNet protocol and whatever LED communication protocol you may want to use. At the moment there is only support for WS2812.
+The software is an Arduino sketch using a library for the ArtNet protocol and whatever LED communication protocol you may want to use. Please update the FastLED controller type to whatever LED you are using.
 
 
 Dependencies
 ------------
 [Arduino_ArtNet](https://github.com/media-architecture/Arduino_ArtNet)
 
-[Arduino_ws2812](https://github.com/media-architecture/Arduino_ws2812)
+[FastLED](https://github.com/media-architecture/FastLED)
 
 [WIZ_Ethernet_Library](https://github.com/media-architecture/WIZ_Ethernet_Library)
 
