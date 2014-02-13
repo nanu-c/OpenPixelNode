@@ -1,4 +1,4 @@
-a/*
+/*
  * OpenPixelNode - Version 0.21
  * by Media Architecture Institute
  *
