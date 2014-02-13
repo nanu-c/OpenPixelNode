@@ -1,47 +1,29 @@
 #include <EEPROM.h>
 
-boolean configCheck(int address, byte *data, int len) {
-  for(int i=0; i<len; i++) {
-    if(EEPROM.read(address+i) != data[i])
+#define EEPROM_MAGIC "OPN "
+
+boolean configCheckMagic() {
+  for(int i=0; i<4; i++) {
+    if(EEPROM.read(i) != EEPROM_MAGIC[i])
       return false;
   }
   return true;
 }
 
-void configRead(int address, byte *data, int len) {
-  for(int i=0; i<len; i++)
-    data[i] = EEPROM.read(address+i);
+void configWriteMagic() {
+  for(int i=0; i<4; i++)
+    EEPROM.write(i, EEPROM_MAGIC[i]);
 }
 
-void configRead(int address, char *data, int len) {
-  configRead(address, (byte*)data, len);
+void configRead(ArtNetConfig & config) {
+  byte *data = (byte*)&config;
+  for(int i=0; i<sizeof(ArtNetConfig); i++)
+    data[i] = EEPROM.read(4+i);
 }
 
-uint32_t configReadInt32(int address) {
-  uint32_t data;
-  configRead(address, (byte*)&data, 4);
-  return data;
+void configWrite(ArtNetConfig & config) {
+  byte *data = (byte*)&config;
+  for(int i=0; i<sizeof(ArtNetConfig); i++)
+    EEPROM.write(4+i, data[i]);
 }
 
-uint32_t configReadByte(int address) {
-  byte data;
-  configRead(address, (byte*)&data, 1);
-  return data;
-}
-
-void configWrite(int address, byte *data, int len) {
-  for(int i=0; i<len; i++)
-    EEPROM.write(address+i, data[i]);
-}
-
-void configWrite(int address, char *data, int len) {
-  configWrite(address, (byte*)data, len);
-}
-
-void configWriteInt32(int address, uint32_t data) {
-  configWrite(address, (byte*)&data, 4);
-}
-
-void configWriteByte(int address, byte data) {
-  configWrite(address, (byte*)&data, 1);
-}

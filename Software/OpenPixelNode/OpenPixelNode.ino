@@ -1,39 +1,44 @@
-#include <Ethernet/utility/w5100.h>
+a/*
+ * OpenPixelNode - Version 0.21
+ * by Media Architecture Institute
+ *
+ * Author: Tobias Ebsen
+ * 
+ * This file is free software; you can redistribute it and/or modify
+ * it under the terms of GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ */
+
 #include <SPI.h>
 #include <Ethernet.h>
 #include <ArtNet.h>
 #include <TrueRandom.h>
 #include <FastLED.h>
 
-#define RST_PIN  8
+// Define pins for reset and status LED
 #define LED_PIN  9
+//#define RST_PIN  8 // Uncomment this to use reset
 
-// Config constants
-#define EEPROM_MAGIC (byte*)"NODE"
-
-#define CONFIG_MAGIC        0
-#define CONFIG_MAC          4
-#define CONFIG_IP          10
-#define CONFIG_SUBNETMASK  14
-#define CONFIG_PORT        18
-#define CONFIG_DHCP        20
-#define CONFIG_PORT1       22
-#define CONFIG_PORT2       23
-#define CONFIG_PORT3       24
-#define CONFIG_PORT4       25
-#define CONFIG_SHORTNAME   26
-#define CONFIG_LONGNAME    44
-
+// Configuration
+ArtNetConfig config = {
+  {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED}, // MAC
+  {192, 168, 1, 1},                     // IP
+  {255, 255, 255, 0},                   // Subnet mask
+  0x1936,                               // UDP port
+  false,                                // DHCP
+  0, 0,                                 // Net and subnet
+  "OpenPixelNode",                      // Short name
+  "OpenPixelNode by Media Architecture Institute", // Long name
+  4,                                    // Number of ports
+  {ARTNET_TYPE_DMX|ARTNET_TYPE_OUTPUT,ARTNET_TYPE_DMX|ARTNET_TYPE_OUTPUT,ARTNET_TYPE_DMX|ARTNET_TYPE_OUTPUT,ARTNET_TYPE_DMX|ARTNET_TYPE_OUTPUT}, // Port types
+  {0, 1, 2, 3},                         // Input port addresses
+  {0, 1, 2, 3},                         // Output port addresses
+  0, 21                                 // Version
+};
 
 // Art-Net class instance with 1024 bytes buffer
-ArtNet artnet = ArtNet(1024);
-
-// Defaults
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-IPAddress ip(172, 16, 0, 1);
-IPAddress subnetmask(255, 255, 255, 0);
-boolean useDhcp = false;
-char nodeName[] = "OpenPixelNode";
+ArtNet artnet = ArtNet(config, 1024);
 
 // LED control
 static WS2811Controller800Khz<0, GRB> port1;
@@ -41,41 +46,42 @@ static WS2811Controller800Khz<2, GRB> port2;
 static WS2811Controller800Khz<4, GRB> port3;
 static WS2811Controller800Khz<6, GRB> port4;
 
+
 void setup() {
-  
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH);
- 
-  // Reset Wiznet w5200
-  pinMode(RST_PIN, OUTPUT);
-  digitalWrite(RST_PIN, LOW); delay(100);
-  digitalWrite(RST_PIN, HIGH); delay(500);
-  
-  digitalWrite(LED_PIN, LOW);
+   
+  // Initialize the ethernet interface
+  ethernetInit();
 
-  // Speed up SPI
-  SPI.setClockDivider(SPI_CLOCK_DIV2);
-  
-  // Read configuration
-  configInit();
-  
-  if(useDhcp)
-    Ethernet.begin(mac);
+  // Check if existing configuration is stored
+  if(configCheckMagic()) {
+    // Read configuration
+    configRead(config);
+  }
+  // Initialize default configuration
+  else {
+    TrueRandom.mac(config.mac);
+    configWriteMagic();
+    configWrite(config);
+  }
+
+  // Setup ethernet
+  if(config.dhcp)
+    Ethernet.begin(config.mac);
   else
-    Ethernet.begin(mac, ip);
+    Ethernet.begin(config.mac, config.ip);
 
-  uint16_t sizes[8] = {(16<<10),0,0,0,0,0,0,0};
-  W5100.setRXMemorySizes(sizes);
+  // Maximize socket memory size
+  ethernetMaximize();
 
-  artnet.setNumPorts(4);
-  artnet.begin(mac);
+  // Begin parsing packets
+  artnet.begin();
 }
 
 void loop() {
 
   // See if there is an ArtNet packet
   if(artnet.parsePacket()) {
-    
+        
     // Indicate activity
     digitalWrite(LED_PIN, HIGH);
     
@@ -97,23 +103,12 @@ void loop() {
       
       case ARTNET_OPCODE_IPPROG: {
         byte cmd = artnet.getIpCommand();
-        
-        if(cmd & ARTNET_IPCMD_IP)
-          configWriteInt32(CONFIG_IP, Ethernet.localIP());
-        if(cmd & ARTNET_IPCMD_SUBNET)
-          configWriteInt32(CONFIG_SUBNETMASK, Ethernet.subnetMask());
-        if(cmd & ARTNET_IPCMD_DHCP)
-          configWriteInt32(CONFIG_DHCP, Ethernet.maintain() != DHCP_CHECK_NONE);
-
+        if(cmd & ARTNET_IPCMD_IP || cmd & ARTNET_IPCMD_SUBNET || cmd & ARTNET_IPCMD_DHCP)
+          configWrite(config);
       } break;
       
       case ARTNET_OPCODE_ADDRESS: {
-        configWrite(CONFIG_SHORTNAME, artnet.getShortName(), 18);
-        configWrite(CONFIG_LONGNAME, artnet.getLongName(), 64);
-
-        for(int i=0; i<4; i++)
-          configWriteByte(CONFIG_PORT1+i, artnet.getPortAddress(i));
-
+        configWrite(config);
       } break;
       
     }
@@ -121,39 +116,29 @@ void loop() {
   }
 }
 
-void configInit() {
+void ethernetInit() {
 
-  if(configCheck(CONFIG_MAGIC, EEPROM_MAGIC, 4)) {
-    
-    configRead(CONFIG_MAC, mac, 6);
-    ip = configReadInt32(CONFIG_IP);
-    subnetmask = configReadInt32(CONFIG_SUBNETMASK);
-    useDhcp = configReadByte(CONFIG_DHCP);
-    
-    configRead(CONFIG_SHORTNAME, artnet.getShortName(), 18);
-    configRead(CONFIG_LONGNAME, artnet.getLongName(), 64);
-    artnet.setPortAddress(0, configReadByte(CONFIG_PORT1));
-    artnet.setPortAddress(1, configReadByte(CONFIG_PORT2));
-    artnet.setPortAddress(2, configReadByte(CONFIG_PORT3));
-    artnet.setPortAddress(3, configReadByte(CONFIG_PORT4));
-  }
-  // Initialize default configuration
-  else {
-    
-    configWrite(CONFIG_MAGIC, EEPROM_MAGIC, 4);
-    TrueRandom.mac(mac);
-    configWrite(CONFIG_MAC, mac, 6);
-    configWriteInt32(CONFIG_IP, ip);
-    configWriteInt32(CONFIG_SUBNETMASK, subnetmask);
-    configWrite(CONFIG_DHCP, &useDhcp, 1);
-    
-    configWrite(CONFIG_SHORTNAME, nodeName, strlen(nodeName)+1);
-    artnet.setShortName(nodeName);
-    configWrite(CONFIG_LONGNAME, nodeName, strlen(nodeName)+1);
-    artnet.setLongName(nodeName);
-    for(int i=0; i<4; i++) {
-      configWriteByte(CONFIG_PORT1+i, i);
-      artnet.setPortAddress(i, i);
-    }
-  }
+  // Reset Wiznet chip
+#ifdef RST_PIN
+  pinMode(RST_PIN, OUTPUT);
+  digitalWrite(RST_PIN, LOW); delay(100);
+  digitalWrite(RST_PIN, HIGH); delay(500);
+#endif
+
+  // Speed up SPI
+  SPI.setClockDivider(SPI_CLOCK_DIV2);
+}
+
+void ethernetMaximize() {
+  // Set memory sizes
+#if defined(W5100_ETHERNET_SHIELD)
+  uint16_t sizes[4] = {(8<<10),0,0,0};
+  W5100.setRXMemorySizes(sizes);
+#elif defined(W5200_ETHERNET_SHIELD)
+  uint16_t sizes[8] = {(16<<10),0,0,0,0,0,0,0};
+  W5100.setRXMemorySizes(sizes);
+#elif defined(W5500_ETHERNET_SHIELD)
+  uint16_t sizes[8] = {(16<<10),0,0,0,0,0,0,0};
+  W5100.setRXMemorySizes(sizes);
+#endif
 }
