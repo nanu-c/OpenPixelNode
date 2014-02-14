@@ -99,11 +99,13 @@ void loop() {
 
       case ARTNET_OPCODE_DMX: {
         byte port = artnet.getDmxPort();
+        short nLeds = artnet.getDmxLength() / sizeof(CRGB);
+        CRGB *data = (CRGB*)artnet.getDmxData();
         switch(port) {
-          case 0: port1.show((const CRGB*)artnet.getDmxData(), artnet.getDmxLength());break;
-          case 1: port2.show((const CRGB*)artnet.getDmxData(), artnet.getDmxLength());break;
-          case 2: port3.show((const CRGB*)artnet.getDmxData(), artnet.getDmxLength());break;
-          case 3: port4.show((const CRGB*)artnet.getDmxData(), artnet.getDmxLength());break;
+          case 0: port1.show(data, nLeds);break;
+          case 1: port2.show(data, nLeds);break;
+          case 2: port3.show(data, nLeds);break;
+          case 3: port4.show(data, nLeds);break;
         }
       } break;
       
