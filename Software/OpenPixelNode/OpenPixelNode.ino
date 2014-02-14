@@ -63,7 +63,13 @@ void setup() {
     configWriteMagic();
     configWrite(config);
   }
-
+  
+  // Initialize FastLED
+  port1.init();
+  port2.init();
+  port3.init();
+  port4.init();
+  
   // Setup ethernet
   if(config.dhcp)
     Ethernet.begin(config.mac);
