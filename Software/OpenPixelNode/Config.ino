@@ -1,6 +1,6 @@
 #include <EEPROM.h>
 
-#define EEPROM_MAGIC "OPN "
+static char EEPROM_MAGIC[] = "OPN ";
 
 boolean configCheckMagic() {
   for(int i=0; i<4; i++) {
