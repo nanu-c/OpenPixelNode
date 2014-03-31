@@ -1,6 +1,18 @@
 #include <EEPROM.h>
+#include <TrueRandom.h>
 
 static char EEPROM_MAGIC[] = "OPN ";
+
+void configGet(ArtNetConfig & config) {
+  if(configCheckMagic()) {
+    configRead(config);
+  }
+  else {
+    TrueRandom.mac(config.mac);
+    configWriteMagic();
+    configWrite(config);
+  }
+}
 
 boolean configCheckMagic() {
   for(int i=0; i<4; i++) {
