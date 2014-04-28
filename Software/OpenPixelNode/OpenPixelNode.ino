@@ -12,6 +12,7 @@
  *
  */
 
+#include <avr/wdt.h>
 #include <SPI.h>
 #include <Ethernet.h>   // https://github.com/media-architecture/WIZ_Ethernet_Library
 #include <ArtNet.h>     // https://github.com/media-architecture/Arduino_ArtNet/
@@ -22,7 +23,7 @@
 
 // Firmware version
 #define OPN_VERSION_HIGH 0
-#define OPN_VERSION_LOW  21
+#define OPN_VERSION_LOW  22
 
 // Default Configuration
 ArtNetConfig config = {
@@ -40,7 +41,7 @@ ArtNetConfig config = {
   {0, 1, 2, 3}                          // Output port addresses
 };
 
-ArtNet artnet = ArtNet(config, 1024);
+ArtNet artnet = ArtNet(config, 530);
 
 // LED control
 static WS2811Controller800Khz<0, GRB> port1;
@@ -54,10 +55,12 @@ void setup() {
   digitalWrite(LED_PIN, HIGH);
   
   // Initialization and optimization
-  //ethernetInit();
+  ethernetInit();
   
   // Read config from EEPROM
   configGet(config);
+  config.verHi = OPN_VERSION_HIGH;
+  config.verLo = OPN_VERSION_LOW;
 
   // Initialize FastLED
   port1.init();
@@ -67,6 +70,10 @@ void setup() {
 
   // Start ArtNet
   artnet.begin();
+  
+  ethernetMaximize();
+  
+  wdt_enable(WDTO_2S);
 
   digitalWrite(LED_PIN, LOW);
 }
@@ -81,10 +88,10 @@ void loop() {
       
       case ARTNET_OPCODE_DMX: {
           switch(artnet.getDmxPort()) {
-            case 0: port1.show((CRGB*)artnet.getDmxData(), artnet.getDmxLength());
-            case 1: port2.show((CRGB*)artnet.getDmxData(), artnet.getDmxLength());
-            case 2: port3.show((CRGB*)artnet.getDmxData(), artnet.getDmxLength());
-            case 3: port4.show((CRGB*)artnet.getDmxData(), artnet.getDmxLength());
+            case 0: port1.show((CRGB*)artnet.getDmxData(), artnet.getDmxLength() / 3);break;
+            case 1: port2.show((CRGB*)artnet.getDmxData(), artnet.getDmxLength() / 3);break;
+            case 2: port3.show((CRGB*)artnet.getDmxData(), artnet.getDmxLength() / 3);break;
+            case 3: port4.show((CRGB*)artnet.getDmxData(), artnet.getDmxLength() / 3);break;
           }
       } break;
       
@@ -104,5 +111,8 @@ void loop() {
     digitalWrite(LED_PIN, LOW);
   }
   // Check DHCP lease
-  artnet.maintain();
+  if(config.dhcp)
+    artnet.maintain();
+  
+  wdt_reset();
 }

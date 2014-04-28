@@ -8,6 +8,11 @@ void ethernetInit() {
   digitalWrite(PIN_RESET, HIGH); delay(500);
 #endif
 
+  // Speed up SPI
+  SPI.setClockDivider(SPI_CLOCK_DIV2);
+}
+
+void ethernetMaximize() {
   // Set memory sizes
 #if defined(W5100_ETHERNET_SHIELD)
   uint16_t sizes[4] = {(4<<10),(4<<10),0,0};
@@ -19,7 +24,4 @@ void ethernetInit() {
   uint16_t sizes[8] = {(8<<10),(8<<10),0,0,0,0,0,0};
   W5100.setRXMemorySizes(sizes);
 #endif
-
-  // Speed up SPI
-  SPI.setClockDivider(SPI_CLOCK_DIV2);
 }
